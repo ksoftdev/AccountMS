@@ -51,9 +51,11 @@ public class TransactionController {
     @GetMapping("/transactions/{username}")
     List<Transaction> userTransaction(@PathVariable String username){
         Account userAccount = accountRepository.findById(username).orElse(null);
+
         if (userAccount == null)
             throw new AccountNotFoundException("No se encontro una cuenta con el username: " + username);
-                    List<Transaction> transactionsOrigin = transactionRepository.findByUsernameOrigin(username);
+
+        List<Transaction> transactionsOrigin = transactionRepository.findByUsernameOrigin(username);
         List<Transaction> transactionsDestinity = transactionRepository.findByUsernameDestiny(username);
         List<Transaction> transactions = Stream.concat(transactionsOrigin.stream(), transactionsDestinity.stream()).collect(Collectors.toList());
 
